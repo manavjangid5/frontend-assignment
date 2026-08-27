@@ -1,0 +1,14 @@
+.link {
+  cursor: pointer;
+  text-decoration: none;
+  width: fit-content;
+}
+
+.arrow {
+  color: var(--mantine-color-brandGreen-6);
+  transition: transform 150ms ease;
+}
+
+.link:hover .arrow {
+  transform: translateX(5px);
+}
