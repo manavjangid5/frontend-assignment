@@ -7,10 +7,13 @@ import HoverArrowLink from '../common/HoverArrowLink.jsx';
 import SectionHeader from '../common/SectionHeader.jsx';
 import { useCollection, useEditMode } from '../../context/ContentContext.jsx';
 
-// White circular prev/next controls pushed OUT beyond the cards, matching the
-// Team carousel. All-side viewport padding keeps the card shadow un-clipped.
+// Prev/next controls sit in a consistent gutter just outside the cards (the
+// page's <main> clips any overhang). The column width is kept tight to two
+// cards so the right control never floats off in empty space.
+const EDGE_PAD = 20;
+const CARD_W = 249;
 const carouselStyles = {
-  controls: { insetInline: -36 },
+  controls: { insetInline: -(EDGE_PAD + 16) },
   control: {
     backgroundColor: 'var(--mantine-color-white)',
     color: 'var(--mantine-color-brandGreen-6)',
@@ -18,7 +21,7 @@ const carouselStyles = {
     border: 'none',
     opacity: 1,
   },
-  viewport: { padding: '12px 24px 40px' },
+  viewport: { padding: `12px ${EDGE_PAD}px 36px` },
 };
 
 export default function PackagesSection() {
@@ -31,7 +34,7 @@ export default function PackagesSection() {
   }, [embla, items.length]);
 
   return (
-    <Container size={1150} px="md" py={{ base: 56, sm: 90, md: 140 }} style={{ overflowX: 'clip' }}>
+    <Container size={1150} px="md" py={{ base: 56, sm: 90, md: 140 }}>
       <Flex
         direction={{ base: 'column', md: 'row' }}
         gap={{ base: 40, md: 30 }}
@@ -49,11 +52,12 @@ export default function PackagesSection() {
           </Stack>
         </Box>
 
-        {/* Cards — a carousel (2 up on desktop) so extra items stay in one row. */}
-        <Box w={{ base: '100%', md: 580 }} style={{ minWidth: 0 }}>
+        {/* Cards — a carousel (2 up on desktop) so extra items stay in one row.
+            Width = two cards + gap + the carousel's own side padding. */}
+        <Box w={{ base: '100%', md: CARD_W * 2 + 30 + EDGE_PAD * 2 }} style={{ minWidth: 0 }}>
           <Carousel
             getEmblaApi={setEmbla}
-            slideSize={{ base: '85%', sm: '249px' }}
+            slideSize={{ base: '85%', sm: `${CARD_W}px` }}
             slideGap={30}
             align="start"
             controlSize={36}

@@ -12,11 +12,13 @@ import member1 from '../../assets/team/member-1.jpg';
 const SLIDE_GAP = 30;
 const slideSize = { base: '85%', xs: '50%', sm: '33.333%', md: '25%' };
 
-// White circular prev/next controls pushed OUT beyond the slides (into the
-// wrapper's side padding) so they don't sit on the photos. Viewport padding
-// on every side keeps the card drop shadow from being clipped.
+// White circular prev/next controls sit just outside the cards — in the page
+// margin (the page's <main> clips any overhang, so no scrollbar). The 20px
+// horizontal viewport padding both keeps the card drop shadow from being
+// clipped and is matched by the heading's left padding so they line up.
+const EDGE_PAD = 20;
 const carouselStyles = {
-  controls: { insetInline: -42 },
+  controls: { insetInline: -(EDGE_PAD + 16) },
   control: {
     backgroundColor: 'var(--mantine-color-white)',
     color: 'var(--mantine-color-brandGreen-6)',
@@ -24,7 +26,7 @@ const carouselStyles = {
     border: 'none',
     opacity: 1,
   },
-  viewport: { padding: '12px 22px 40px' },
+  viewport: { padding: `12px ${EDGE_PAD}px 40px` },
 };
 
 export default function TeamSection() {
@@ -38,22 +40,25 @@ export default function TeamSection() {
   }, [embla, items.length]);
 
   return (
-    <Container size={1150} px="md" py={{ base: 56, sm: 80, md: 112 }} style={{ overflowX: 'clip' }}>
+    <Container size={1150} px="md" py={{ base: 56, sm: 80, md: 112 }}>
       <Stack gap={0}>
-        <SectionHeader
-          eyebrow="Team"
-          title="Get Quality Education"
-          order={3}
-          textMaxWidth={469}
-          textFw={500}
-        >
-          Problems trying to resolve the conflict between the two major realms of
-          Classical physics: Newtonian mechanics
-        </SectionHeader>
+        {/* left padding matches the carousel's inner padding so the heading
+            lines up with the first card */}
+        <Box pl={{ base: 0, sm: EDGE_PAD }}>
+          <SectionHeader
+            eyebrow="Team"
+            title="Get Quality Education"
+            order={3}
+            textMaxWidth={469}
+            textFw={500}
+          >
+            Problems trying to resolve the conflict between the two major realms of
+            Classical physics: Newtonian mechanics
+          </SectionHeader>
+        </Box>
 
-        {/* Figma: 112px between the heading block and the card row.
-            Side padding houses the prev/next controls. */}
-        <Box mt={{ base: 48, md: 112 }} px={{ base: 0, sm: 48 }}>
+        {/* Figma: 112px between the heading block and the card row. */}
+        <Box mt={{ base: 48, md: 112 }}>
           <Carousel
             getEmblaApi={setEmbla}
             slideSize={slideSize}
