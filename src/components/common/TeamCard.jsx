@@ -16,7 +16,14 @@ const socials = [
  */
 export default function TeamCard({ name, role, photo, onRemove }) {
   return (
-    <Card radius="lg" shadow="md" padding={0} pos="relative" style={{ overflow: 'hidden' }}>
+    <Card
+      radius="lg"
+      shadow="md"
+      padding={0}
+      pos="relative"
+      mih={375}
+      style={{ overflow: 'hidden' }}
+    >
       {onRemove && (
         <CloseButton
           aria-label="Remove member"
@@ -29,7 +36,15 @@ export default function TeamCard({ name, role, photo, onRemove }) {
         />
       )}
 
-      <Image src={photo} alt={name} h={231} fit="cover" />
+      {/* Fixed 231px image band (Figma). Box + object-fit keeps every card the
+          same height regardless of the source photo's aspect ratio. */}
+      <Box h={231} style={{ overflow: 'hidden' }}>
+        <img
+          src={photo}
+          alt={name}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        />
+      </Box>
 
       <Stack gap={10} p={30} align="center">
         <Text fw={700} fz={16} lh="24px" c="brandNavy.6" ta="center">

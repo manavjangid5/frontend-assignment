@@ -6,23 +6,31 @@ import SectionHeader from '../common/SectionHeader.jsx';
 import { useCollection, useEditMode } from '../../context/ContentContext.jsx';
 import member1 from '../../assets/team/member-1.jpg';
 
+// Figma cards row: 4 across on desktop with 30px gaps. Mantine's `slideGap`
+// handles the spacing (padding + negative margin), so plain percentages sit
+// flush: 4 × 25% on md, fewer + a peek on smaller screens.
+const SLIDE_GAP = 30;
+const slideSize = { base: '85%', xs: '50%', sm: '33.333%', md: '25%' };
+
 export default function TeamSection() {
   const { items, add, remove } = useCollection('team');
   const [editMode] = useEditMode();
 
   return (
     <Container size={1050} px="md" py={{ base: 56, sm: 80, md: 112 }}>
-      <Stack gap={{ base: 48, md: 112 }}>
+      <Stack gap={0}>
         <SectionHeader eyebrow="Team" title="Get Quality Education" order={3} textMaxWidth={469}>
           Problems trying to resolve the conflict between the two major realms of
           Classical physics: Newtonian mechanics
         </SectionHeader>
 
-        <Box>
+        {/* Figma: 112px between the heading block and the card row. */}
+        <Box mt={{ base: 48, md: 112 }}>
           <Carousel
-            slideSize={{ base: '80%', xs: '50%', sm: '33.333%', md: '25%' }}
-            slideGap={30}
+            slideSize={slideSize}
+            slideGap={SLIDE_GAP}
             align="start"
+            withControls={false}
             withIndicators={false}
           >
             {items.map((member) => (
