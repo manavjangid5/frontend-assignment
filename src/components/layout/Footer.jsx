@@ -26,9 +26,8 @@ function SocialRow() {
 export default function Footer() {
   return (
     <Box component="footer">
-      {/* Upper block — white */}
       <Box bg="white">
-        <Container size={1050} px="md" py={50}>
+        <Container size={1150} px="md" py={50}>
           <Grid gutter={30}>
             {footerColumns.map((col) => (
               <Grid.Col key={col.id} span={{ base: 6, sm: 4, md: 2 }}>
@@ -76,9 +75,8 @@ export default function Footer() {
         </Container>
       </Box>
 
-      {/* Lower bar — #FAFAFA */}
       <Box bg="#FAFAFA">
-        <Container size={1050} px="md" py={25}>
+        <Container size={1150} px="md" py={25}>
           <Group justify="space-between" gap="md">
             <Text fw={700} fz={14} lh="24px" c="brandGray.6">
               Made With Love By Figmaland All Right Reserved

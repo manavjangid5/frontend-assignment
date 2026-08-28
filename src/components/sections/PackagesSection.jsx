@@ -1,16 +1,35 @@
+import { useEffect, useState } from 'react';
 import { Box, Button, Container, Flex, Stack } from '@mantine/core';
+import { Carousel } from '@mantine/carousel';
 import { IconPlus } from '@tabler/icons-react';
 import FeatureCard from '../common/FeatureCard.jsx';
 import HoverArrowLink from '../common/HoverArrowLink.jsx';
 import SectionHeader from '../common/SectionHeader.jsx';
 import { useCollection, useEditMode } from '../../context/ContentContext.jsx';
 
+// White circular prev/next controls, matching the Team carousel.
+const carouselStyles = {
+  control: {
+    backgroundColor: 'var(--mantine-color-white)',
+    color: 'var(--mantine-color-brandGreen-6)',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)',
+    border: 'none',
+    opacity: 1,
+  },
+  viewport: { paddingBlock: 8 },
+};
+
 export default function PackagesSection() {
   const { items, add, remove } = useCollection('packages');
   const [editMode] = useEditMode();
+  const [embla, setEmbla] = useState(null);
+
+  useEffect(() => {
+    embla?.reInit();
+  }, [embla, items.length]);
 
   return (
-    <Container size={1050} px="md" py={{ base: 56, sm: 90, md: 140 }}>
+    <Container size={1150} px="md" py={{ base: 56, sm: 90, md: 140 }}>
       <Flex
         direction={{ base: 'column', md: 'row' }}
         gap={{ base: 40, md: 30 }}
@@ -28,24 +47,14 @@ export default function PackagesSection() {
           </Stack>
         </Box>
 
-        {/* Cards — wrap when the row is too narrow so there is never overflow. */}
-        <Flex gap={30} wrap="wrap" justify={{ base: 'center', md: 'flex-start' }} style={{ minWidth: 0 }}>
-          {items.map((pkg) => (
-            <FeatureCard
-              key={pkg.id}
-              icon={pkg.icon}
-              title={pkg.title}
-              description={pkg.description}
-              onRemove={editMode ? () => remove(pkg.id) : undefined}
-            />
-          ))}
-
+        {/* Cards — a carousel (2 up on desktop) so extra items stay in one row. */}
+        <Box w={{ base: '100%', md: 528 }} style={{ minWidth: 0 }}>
           {editMode && (
             <Button
-              variant="light"
-              color="brandGreen"
-              leftSection={<IconPlus size={16} />}
-              h={292}
+              size="xs"
+              variant="default"
+              leftSection={<IconPlus size={14} />}
+              mb="sm"
               onClick={() =>
                 add({
                   icon: 'blackboards',
@@ -57,7 +66,29 @@ export default function PackagesSection() {
               Add card
             </Button>
           )}
-        </Flex>
+
+          <Carousel
+            getEmblaApi={setEmbla}
+            slideSize={{ base: '85%', sm: '249px' }}
+            slideGap={30}
+            align="start"
+            controlSize={36}
+            withControls={editMode || items.length > 2}
+            withIndicators={false}
+            styles={carouselStyles}
+          >
+            {items.map((pkg) => (
+              <Carousel.Slide key={pkg.id}>
+                <FeatureCard
+                  icon={pkg.icon}
+                  title={pkg.title}
+                  description={pkg.description}
+                  onRemove={editMode ? () => remove(pkg.id) : undefined}
+                />
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+        </Box>
       </Flex>
     </Container>
   );

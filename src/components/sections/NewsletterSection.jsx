@@ -8,6 +8,8 @@ export default function NewsletterSection() {
 
   const form = useForm({
     initialValues: { email: '' },
+    // Clear the success message as soon as the field is edited again.
+    onValuesChange: () => setSubmitted(false),
     validate: {
       // Figma annotation: validate before submit, show the message below the field.
       email: (value) => {
@@ -21,12 +23,11 @@ export default function NewsletterSection() {
   const handleSubmit = () => {
     // No backend in scope — confirm locally once validation passes.
     setSubmitted(true);
-    form.reset();
   };
 
   return (
     <Box bg="brandPink.0">
-      <Container size={1050} px="md" py={{ base: 64, sm: 110, md: 160 }}>
+      <Container size={1150} px="md" py={{ base: 64, sm: 110, md: 160 }}>
         <Stack gap={0} align="center">
           <SectionHeader
             eyebrow="Newsletter"

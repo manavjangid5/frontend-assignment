@@ -8,7 +8,7 @@ export default function Hero() {
         direction={{ base: 'column', md: 'row' }}
         align={{ base: 'stretch', md: 'center' }}
         gap={{ base: 32, md: 24 }}
-        pl={{ base: 'md', md: 80 }}
+        pl={{ base: 'md', md: 204 }}
         pr={{ base: 'md', md: 0 }}
         py={{ base: 40, md: 40 }}
       >

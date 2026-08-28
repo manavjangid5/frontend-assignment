@@ -28,10 +28,9 @@ export default function Navbar() {
     <Box bg="brandPink.0" component="header">
       {/* Figma nav content spans ~1050px — aligned with the page body. */}
       <Container size={1050} px="md" h={91}>
-        <Group h="100%" align="flex-start" wrap="nowrap" justify="flex-start"
-  gap={120}>
-          {/* Brand + links sit together on the left (Figma: ~40px apart). */}
-          <Group gap={80} wrap="nowrap" mt={16}>
+        <Group h="100%" align="flex-start" wrap="nowrap" justify="space-between">
+          {/* Brand + links on the left; login/CTA pushed to the right edge. */}
+          <Group gap={120} wrap="nowrap" mt={16}>
             <Text
               component="a"
               href="#"
@@ -47,8 +46,6 @@ export default function Navbar() {
               <NavItems />
             </Group>
           </Group>
-
-          {/* Login + CTA sit at the top-right of the bar (Figma y≈3). */}
           <Group gap={40} wrap="nowrap" align="center" visibleFrom="md" mt={3}>
             <Anchor href="#" underline="never" fw={700} fz={14} c="brandGreen.6">
               Login

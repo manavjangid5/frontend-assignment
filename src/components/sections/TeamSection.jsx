@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Box, Button, Container, Stack } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
 import { IconPlus } from '@tabler/icons-react';
@@ -6,18 +7,36 @@ import SectionHeader from '../common/SectionHeader.jsx';
 import { useCollection, useEditMode } from '../../context/ContentContext.jsx';
 import member1 from '../../assets/team/member-1.jpg';
 
-// Figma cards row: 4 across on desktop with 30px gaps. Mantine's `slideGap`
-// handles the spacing (padding + negative margin), so plain percentages sit
-// flush: 4 × 25% on md, fewer + a peek on smaller screens.
+// Figma cards row: 4 across on desktop with 30px gaps; fewer + a peek on
+// smaller screens.
 const SLIDE_GAP = 30;
 const slideSize = { base: '85%', xs: '50%', sm: '33.333%', md: '25%' };
+
+// White circular prev/next controls; vertical viewport padding keeps the card
+// drop shadow from being clipped by the viewport's overflow:hidden.
+const carouselStyles = {
+  control: {
+    backgroundColor: 'var(--mantine-color-white)',
+    color: 'var(--mantine-color-brandGreen-6)',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)',
+    border: 'none',
+    opacity: 1,
+  },
+  viewport: { paddingTop: 6, paddingBottom: 30 },
+};
 
 export default function TeamSection() {
   const { items, add, remove } = useCollection('team');
   const [editMode] = useEditMode();
+  const [embla, setEmbla] = useState(null);
+
+  // Re-measure when members are added / removed so the new slide is reachable.
+  useEffect(() => {
+    embla?.reInit();
+  }, [embla, items.length]);
 
   return (
-    <Container size={1050} px="md" py={{ base: 56, sm: 80, md: 112 }}>
+    <Container size={1150} px="md" py={{ base: 56, sm: 80, md: 112 }}>
       <Stack gap={0}>
         <SectionHeader
           eyebrow="Team"
@@ -33,14 +52,14 @@ export default function TeamSection() {
         {/* Figma: 112px between the heading block and the card row. */}
         <Box mt={{ base: 48, md: 112 }}>
           <Carousel
+            getEmblaApi={setEmbla}
             slideSize={slideSize}
             slideGap={SLIDE_GAP}
             align="start"
-            withControls={false}
+            controlSize={40}
+            withControls={editMode || items.length > 4}
             withIndicators={false}
-            // vertical breathing room so the card drop shadow isn't clipped by
-            // the carousel viewport's overflow:hidden (no horizontal change)
-            styles={{ viewport: { paddingTop: 6, paddingBottom: 30 } }}
+            styles={carouselStyles}
           >
             {items.map((member) => (
               <Carousel.Slide key={member.id}>
@@ -57,12 +76,9 @@ export default function TeamSection() {
           {editMode && (
             <Button
               mt="lg"
-              variant="light"
-              color="brandGreen"
+              variant="default"
               leftSection={<IconPlus size={16} />}
-              onClick={() =>
-                add({ name: 'New Member', role: 'Profession', photo: member1 })
-              }
+              onClick={() => add({ name: 'New Member', role: 'Profession', photo: member1 })}
             >
               Add member
             </Button>
