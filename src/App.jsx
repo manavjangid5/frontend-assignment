@@ -4,6 +4,7 @@ import Hero from './components/sections/Hero.jsx';
 import PackagesSection from './components/sections/PackagesSection.jsx';
 import TeamSection from './components/sections/TeamSection.jsx';
 import NewsletterSection from './components/sections/NewsletterSection.jsx';
+import EditModeToggle from './components/common/EditModeToggle.jsx';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <NewsletterSection />
       </main>
       <Footer />
+      <EditModeToggle />
     </>
   );
 }

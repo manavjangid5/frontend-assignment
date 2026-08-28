@@ -1,19 +1,45 @@
-import { Card, ThemeIcon, Text, Divider, Stack } from '@mantine/core';
+import { Box, Card, CloseButton, Image, Stack, Text } from '@mantine/core';
+import { featureIcons } from '../../assets/icons/index.js';
 
-export default function FeatureCard({ icon: Icon, title, description }) {
+/**
+ * A single "packages" feature card.
+ * Figma: 249×292, padding 35/40, square corners, soft drop shadow, a rounded
+ * green icon tile, a 50×2 red accent bar and a short description.
+ *
+ * `onRemove` is supplied only in edit mode and renders a delete control.
+ */
+export default function FeatureCard({ icon, title, description, onRemove }) {
   return (
-    <Card padding="lg" radius="md" withBorder={false} shadow="xs" w={{ base: '100%', xs: 170 }}>
-      <Stack gap="sm">
-        <ThemeIcon size={48} radius="md" color="brandGreen">
-          <Icon size={26} stroke={1.75} />
-        </ThemeIcon>
+    <Card
+      radius={0}
+      shadow="md"
+      padding={0}
+      w={249}
+      mih={292}
+      pos="relative"
+      style={{ flexShrink: 0 }}
+    >
+      {onRemove && (
+        <CloseButton
+          aria-label="Remove card"
+          onClick={onRemove}
+          pos="absolute"
+          top={8}
+          right={8}
+        />
+      )}
+
+      <Stack gap={20} p="35px 40px">
+        <Box w={70} h={76} bg="brandGreen.6" style={{ borderRadius: 10 }} p="22px 19px">
+          <Image src={featureIcons[icon]} alt="" w={32} h={32} />
+        </Box>
 
         <div>
-          <Text fw={600} c="brandNavy.6" size="sm" mb={4}>
+          <Text fw={700} fz={16} lh="24px" c="brandNavy.6">
             {title}
           </Text>
-          <Divider w={24} size="sm" color="brandRed.6" mb={8} />
-          <Text size="xs" c="brandGray.6">
+          <Box w={50} h={2} bg="brandRed.6" my={10} />
+          <Text fw={400} fz={14} lh="20px" c="brandGray.6" maw={140}>
             {description}
           </Text>
         </div>

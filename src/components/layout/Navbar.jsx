@@ -1,64 +1,70 @@
 import { useState } from 'react';
 import {
-  Group,
-  Container,
-  Text,
-  Button,
-  Burger,
-  Drawer,
-  Stack,
   Anchor,
+  Box,
+  Burger,
+  Button,
+  Container,
+  Drawer,
+  Group,
+  Stack,
+  Text,
 } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons-react';
 import { navLinks } from '../../data/footerLinks.js';
 
-export default function Navbar() {
-  const [opened, setOpened] = useState(false);
-
-  const links = navLinks.map((link) => (
-    <Anchor key={link} c="brandNavy.6" fw={500} size="sm" underline="never" href="#">
+function NavItems() {
+  return navLinks.map((link) => (
+    <Anchor key={link} href="#" underline="never" fw={700} fz={14} lh="24px" c="brandGray.6">
       {link}
     </Anchor>
   ));
+}
+
+export default function Navbar() {
+  const [opened, setOpened] = useState(false);
 
   return (
-    <Container size="xl" py="md">
-      <Group justify="space-between" wrap="nowrap">
-        <Text fw={700} size="lg" c="brandNavy.6">
-          Brandname
-        </Text>
+    <Box bg="brandPink.0" component="header">
+      {/* Figma navbar row max-width is 1322px — wider than the 1050px page body. */}
+      <Container size={1320} px="md" h={91}>
+        <Group h="100%" justify="space-between" wrap="nowrap">
+          <Text component="a" href="#" fw={700} fz={24} lh="32px" c="brandNavy.6" style={{ textDecoration: 'none' }}>
+            Brandname
+          </Text>
 
-        <Group gap="xl" visibleFrom="sm">
-          {links}
+          <Group gap={21} visibleFrom="md">
+            <NavItems />
+          </Group>
+
+          <Group gap={30} wrap="nowrap" visibleFrom="md">
+            <Anchor href="#" underline="never" fw={700} fz={14} c="brandGreen.6">
+              Login
+            </Anchor>
+            <Button
+              color="brandGreen"
+              rightSection={<IconArrowRight size={16} />}
+              styles={{ root: { height: 52, paddingInline: 25 } }}
+            >
+              Join Us
+            </Button>
+          </Group>
+
+          <Burger opened={opened} onClick={() => setOpened((o) => !o)} hiddenFrom="md" aria-label="Toggle navigation" />
         </Group>
+      </Container>
 
-        <Group gap="md" visibleFrom="sm" wrap="nowrap">
-          <Anchor c="brandGreen.6" fw={500} size="sm" underline="never" href="#">
-            Login
-          </Anchor>
-          <Button
-            color="brandGreen"
-            radius="xl"
-            rightSection={<IconArrowRight size={16} />}
-          >
-            Join Us
-          </Button>
-        </Group>
-
-        <Burger opened={opened} onClick={() => setOpened((o) => !o)} hiddenFrom="sm" />
-      </Group>
-
-      <Drawer opened={opened} onClose={() => setOpened(false)} hiddenFrom="sm" padding="md">
+      <Drawer opened={opened} onClose={() => setOpened(false)} hiddenFrom="md" padding="lg" size="xs" title="Menu">
         <Stack gap="lg">
-          {links}
-          <Anchor c="brandGreen.6" fw={500} size="sm" underline="never" href="#">
+          <NavItems />
+          <Anchor href="#" underline="never" fw={700} fz={14} c="brandGreen.6">
             Login
           </Anchor>
-          <Button color="brandGreen" radius="xl" rightSection={<IconArrowRight size={16} />} fullWidth>
+          <Button color="brandGreen" fullWidth rightSection={<IconArrowRight size={16} />}>
             Join Us
           </Button>
         </Stack>
       </Drawer>
-    </Container>
+    </Box>
   );
 }

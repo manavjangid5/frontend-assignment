@@ -1,6 +1,7 @@
-import { Box, Container, Stack, Text, Title, TextInput, Button, Group } from '@mantine/core';
-import { useForm } from '@mantine/form';
 import { useState } from 'react';
+import { Box, Button, Container, Group, Stack, Text, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import SectionHeader from '../common/SectionHeader.jsx';
 
 export default function NewsletterSection() {
   const [submitted, setSubmitted] = useState(false);
@@ -8,6 +9,7 @@ export default function NewsletterSection() {
   const form = useForm({
     initialValues: { email: '' },
     validate: {
+      // Figma annotation: validate before submit, show the message below the field.
       email: (value) => {
         if (!value.trim()) return 'Email is required';
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Enter a valid email address';
@@ -16,55 +18,70 @@ export default function NewsletterSection() {
     },
   });
 
-  const handleSubmit = (values) => {
-    // No backend specified in the assignment — this simulates a successful
-    // subscribe. Swap in a real API call here if one gets added later.
+  const handleSubmit = () => {
+    // No backend in scope — confirm locally once validation passes.
     setSubmitted(true);
     form.reset();
   };
 
   return (
     <Box bg="brandPink.0">
-      <Container size="sm" py={{ base: 50, sm: 70 }}>
-        <Stack gap="sm" align="center" ta="center" mb="xl">
-          <Text c="brandGreen.6" fw={600} size="sm">
-            Newsletter
-          </Text>
-          <Title order={2} c="brandNavy.6" fz={{ base: 26, sm: 30 }}>
-            Watch our Courses
-          </Title>
-          <Text c="brandGray.6" size="sm" maw={420}>
+      <Container size={1050} px="md" py={{ base: 64, sm: 110, md: 160 }}>
+        <Stack gap={{ base: 48, md: 80 }} align="center">
+          <SectionHeader
+            eyebrow="Newsletter"
+            title="Watch our Courses"
+            order={3}
+            align="center"
+            textMaxWidth={469}
+          >
             Problems trying to resolve the conflict between the two major realms of
             Classical physics: Newtonian mechanics
-          </Text>
+          </SectionHeader>
+
+          <Box w="100%" maw={688}>
+            <form onSubmit={form.onSubmit(handleSubmit)} noValidate>
+              <Group gap={0} align="flex-start" wrap="nowrap">
+                <TextInput
+                  aria-label="Your Email"
+                  placeholder="Your Email"
+                  size="md"
+                  style={{ flex: 1 }}
+                  styles={{
+                    input: {
+                      height: 58,
+                      backgroundColor: '#F9F9F9',
+                      borderColor: '#E6E6E6',
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0,
+                    },
+                  }}
+                  {...form.getInputProps('email')}
+                />
+                <Button
+                  type="submit"
+                  color="brandGreen"
+                  styles={{
+                    root: {
+                      height: 58,
+                      paddingInline: 30,
+                      borderTopLeftRadius: 0,
+                      borderBottomLeftRadius: 0,
+                    },
+                  }}
+                >
+                  Subscribe
+                </Button>
+              </Group>
+            </form>
+
+            {submitted && (
+              <Text mt="sm" fz={14} c="brandGreen.7" ta="center">
+                Thanks for subscribing!
+              </Text>
+            )}
+          </Box>
         </Stack>
-
-        <form onSubmit={form.onSubmit(handleSubmit)}>
-          <Group gap={0} wrap="nowrap" align="flex-start">
-            <TextInput
-              placeholder="Your Email"
-              radius={0}
-              size="md"
-              style={{ flex: 1 }}
-              styles={{ input: { borderTopLeftRadius: 6, borderBottomLeftRadius: 6 } }}
-              {...form.getInputProps('email')}
-            />
-            <Button
-              type="submit"
-              color="brandGreen"
-              size="md"
-              styles={{ root: { borderTopRightRadius: 6, borderBottomRightRadius: 6, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 } }}
-            >
-              Subscribe
-            </Button>
-          </Group>
-        </form>
-
-        {submitted && (
-          <Text c="brandGreen.7" size="sm" ta="center" mt="sm">
-            Thanks for subscribing!
-          </Text>
-        )}
       </Container>
     </Box>
   );

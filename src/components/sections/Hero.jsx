@@ -1,45 +1,50 @@
-import { Box, Container, Grid, Stack, Text, Title, Button, Image } from '@mantine/core';
-import { IconArrowRight } from '@tabler/icons-react';
+import { Box, Button, Container, Grid, Group, Image, Stack, Text, Title } from '@mantine/core';
+import heroIllustration from '../../assets/hero.png';
 
 export default function Hero() {
   return (
     <Box bg="brandPink.0">
-      <Container size="xl" py={{ base: 40, sm: 60, md: 80 }}>
-        <Grid align="center" gutter={{ base: 40, md: 60 }}>
-          <Grid.Col span={{ base: 12, md: 6 }}>
-            <Stack gap="md" maw={480}>
-              <Text c="brandGreen.6" fw={600} size="sm">
+      <Container size={1320} px="md" py={{ base: 40, md: 40 }}>
+        <Grid gutter={30} align="center">
+          <Grid.Col span={{ base: 12, md: 5 }}>
+            <Stack gap={30} maw={573}>
+              <Text component="span" fw={700} fz={16} lh="24px" c="brandGreen.6">
                 Welcome
               </Text>
-              <Title order={1} c="brandNavy.6" fz={{ base: 32, sm: 40, md: 48 }} lh={1.15}>
+
+              <Title order={1} c="brandNavy.6" fz={{ base: 40, sm: 48, md: 58 }} lh={1.38}>
                 Best Learning Opportunities
               </Title>
-              <Text c="brandGray.6" size="md">
+
+              <Text component="p" fw={400} fz={20} lh="30px" c="brandGray.6" maw={340}>
                 Our goal is to make online education work for everyone
               </Text>
-              <Box mt="sm">
+
+              <Group gap={10}>
                 <Button
                   color="brandGreen"
-                  radius="sm"
-                  mr="sm"
-                  rightSection={<IconArrowRight size={16} />}
+                  styles={{ root: { height: 52, paddingInline: 40 } }}
                 >
                   Join Us
                 </Button>
-                <Button variant="outline" color="brandGreen" radius="sm">
+                <Button
+                  variant="outline"
+                  color="brandGreen"
+                  styles={{ root: { height: 52, paddingInline: 40 } }}
+                >
                   Learn More
                 </Button>
-              </Box>
+              </Group>
             </Stack>
           </Grid.Col>
 
-          <Grid.Col span={{ base: 12, md: 6 }}>
+          <Grid.Col span={{ base: 12, md: 7 }}>
             <Image
-              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&auto=format&fit=crop&q=80"
-              alt="Student holding books"
-              radius="md"
-              fit="cover"
-              h={{ base: 300, sm: 400, md: 460 }}
+              src={heroIllustration}
+              alt="Student holding folders"
+              fit="contain"
+              ml="auto"
+              maw={{ base: 420, sm: 560, md: 704 }}
             />
           </Grid.Col>
         </Grid>

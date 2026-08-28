@@ -1,6 +1,7 @@
 # Frontend Assignment
 
-A responsive landing page built with **React + Vite + Mantine UI**, matching the provided Figma design.
+A responsive landing page built with **React + Vite + Mantine UI**, matching the
+provided Figma design across desktop, tablet and mobile.
 
 ## Running the project
 
@@ -21,52 +22,78 @@ npm run preview
 
 ```
 src/
-  theme.js                    Mantine theme — colors, fonts, component defaults
+  theme.js                    Mantine theme — single source of truth for colours,
+                              fonts, the type ramp, radii and shadows (all taken
+                              from the Figma component styles)
   App.jsx                     Assembles all sections
-  data/                       All repeating content lives here — edit these
-    packages.js                 to add/remove/update items, no component
-    team.js                     changes needed
+  context/
+    ContentContext.jsx        Small React context + useReducer holding the
+                              editable collections (packages, team) and the
+                              "edit mode" flag
+  data/                       Seed content — edit these arrays to add / remove /
+    packages.js                 update items with no component changes
+    team.js
     footerLinks.js
+  assets/
+    hero.png                  Hero illustration (exported from Figma)
+    team/                     Team member photos (exported from Figma)
+    icons/                    Feature + social SVG glyphs (exported from Figma)
   components/
     layout/                   Navbar, Footer
     sections/                 Hero, PackagesSection, TeamSection, NewsletterSection
-    common/                   FeatureCard, TeamCard, HoverArrowLink (reusable pieces)
+    common/                   FeatureCard, TeamCard, SectionHeader,
+                              HoverArrowLink, EditModeToggle
 ```
 
-Every repeating block (feature cards, team members, footer columns) renders from
-an array in `src/data/`. Adding, removing, or editing an item is a one-line change
-to that file — no JSX edits required.
+## Dynamic content
 
-## Notes / assumptions made building this
+Every repeating block (feature cards, team members) renders from an array in
+`src/data/`. There are two ways to change them:
 
-A few things weren't fully resolvable from the screenshots alone — flagging them
-rather than silently guessing:
+1. **Edit the seed data** — add, remove or edit an entry in `src/data/*.js`;
+   the sections re-render from it, no JSX changes needed.
+2. **At runtime** — click **“Edit content”** (bottom-right). While on, the
+   Packages and Team sections show add / remove controls. State lives in
+   `src/context/ContentContext.jsx` (plain context + `useReducer`, no external
+   state library). Off by default, so the page matches the design as-is.
 
-- **Brand green color**: the Figma color-palette export showed `396BA7B`, which
-  is 7 characters (invalid hex). Interpreted as `#96BA7B` — confirm against
-  Figma's color picker and update the single source of truth in `src/theme.js`
-  if different.
-- **Fonts**: the design doesn't specify typefaces anywhere I could see. Used
-  Poppins (headings) + Inter (body) as a reasonable modern pairing — swap the
-  Google Fonts link in `index.html` and `fontFamily` values in `theme.js` if
-  the real assets/brand guide specify something else.
-- **Hero image & decorative shapes**: the hero photo is a stock placeholder
-  (Unsplash), and the background blob/squiggle decorations from the Figma
-  hero weren't reproduced as custom SVGs. Swap in the real image and any
-  decorative assets from the Figma "Assets" Google Drive link.
-- **Team photos**: placeholder avatars (pravatar.cc), same reason as above.
-- **Newsletter submit**: no backend was specified, so submitting shows a
-  success message locally rather than calling an API. Validation (required +
-  email format) runs before that, with the error shown under the field per
-  the Figma annotation.
-- **Card count**: only two feature cards ("Certified Teacher", "Expert
-  Instruction") appeared in the full-page export — built as-is.
+## Design tokens (from Figma)
+
+| Token | Value | Use |
+| --- | --- | --- |
+| Primary | `#96BB7C` | Buttons, icons, links, accents |
+| Heading text | `#252B42` | Headings |
+| Body text | `#737373` | Paragraph copy |
+| Accent bar | `#E74040` | Short underlines under section titles |
+| Section tint | `#FFF2F3` | Hero + newsletter backgrounds |
+| Footer bar | `#FAFAFA` | Footer lower strip |
+| Font | Montserrat (400, 700) | Everything |
+| Radii | 5px / 10px / 20px | Controls / icon tiles / team cards |
+
+Type ramp (font-size / line-height): H1 58/80, H2 40/50, H3 24/32,
+hero sub 20/30, card + footer headings 16/24, body 14/20, small 12/16.
+
+## Notes / assumptions
+
+- **Hero decorations** ship as one exported PNG (photo + colour blobs +
+  squiggles composited) rather than reconstructed vectors.
+- **Feature-card and social icons** are the exact SVGs exported from the design
+  (`src/assets/icons`). Footer contact icons use Tabler equivalents
+  (`IconPhone` / `IconMapPin` / `IconSend`) as the design has no custom assets
+  for them.
+- **Newsletter submit** has no backend in scope — validation (required + email
+  format, error shown under the field per the Figma annotation) runs, then a
+  local success message is shown.
+- The Packages section title reads **“Approdable Packages”** to match the Figma
+  text exactly (the design contains that spelling).
+- Tablet / mobile layouts are derived from the single 1440px desktop frame the
+  Figma provides, using Mantine's responsive style props and breakpoints.
 
 ## Tech constraints followed
 
 - Mantine UI components for all UI elements
-- No Tailwind / styled-components / other CSS frameworks
-- One CSS module (`HoverArrowLink.module.css`) for the hover micro-interaction
-  the design calls for (arrow shifts 5px right on hover) — Mantine's style
-  props don't cover `:hover` pseudo-class transforms, so this is the one
-  "edge case not possible with Mantine" the assignment doc allows for
+- No Tailwind / styled-components / other CSS libraries
+- Styling via Mantine style props + theming; the only custom CSS is
+  `HoverArrowLink.module.css` for the `:hover` arrow-shift micro-interaction the
+  design annotation calls for (Mantine style props can't express a `:hover`
+  transform)

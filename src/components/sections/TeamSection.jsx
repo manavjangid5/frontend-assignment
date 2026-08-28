@@ -1,43 +1,57 @@
-import { Container, Stack, Text, Title, Divider } from '@mantine/core';
+import { Box, Button, Container, Stack } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
+import { IconPlus } from '@tabler/icons-react';
 import TeamCard from '../common/TeamCard.jsx';
-import { team } from '../../data/team.js';
+import SectionHeader from '../common/SectionHeader.jsx';
+import { useCollection, useEditMode } from '../../context/ContentContext.jsx';
+import member1 from '../../assets/team/member-1.jpg';
 
 export default function TeamSection() {
+  const { items, add, remove } = useCollection('team');
+  const [editMode] = useEditMode();
+
   return (
-    <Container size="xl" py={{ base: 40, sm: 60, md: 80 }}>
-      <Stack gap="sm" maw={420} mb="xl">
-        <Text c="brandGreen.6" fw={600} size="sm">
-          Team
-        </Text>
-        <Title order={2} c="brandNavy.6" fz={{ base: 26, sm: 30 }}>
-          Get Quality Education
-        </Title>
-        <Text c="brandGray.6" size="sm">
+    <Container size={1050} px="md" py={{ base: 56, sm: 80, md: 112 }}>
+      <Stack gap={{ base: 48, md: 112 }}>
+        <SectionHeader eyebrow="Team" title="Get Quality Education" order={3} textMaxWidth={469}>
           Problems trying to resolve the conflict between the two major realms of
           Classical physics: Newtonian mechanics
-        </Text>
-      </Stack>
+        </SectionHeader>
 
-      <Carousel
-        slideSize={{ base: '85%', xs: '45%', sm: '32%', md: '24%' }}
-        slideGap="md"
-        align="start"
-        withControls
-        withIndicators={false}
-        controlsOffset="xs"
-      >
-        {team.map((member) => (
-          <Carousel.Slide key={member.id}>
-            <TeamCard
-              name={member.name}
-              role={member.role}
-              photo={member.photo}
-              socials={member.socials}
-            />
-          </Carousel.Slide>
-        ))}
-      </Carousel>
+        <Box>
+          <Carousel
+            slideSize={{ base: '80%', xs: '50%', sm: '33.333%', md: '25%' }}
+            slideGap={30}
+            align="start"
+            withIndicators={false}
+          >
+            {items.map((member) => (
+              <Carousel.Slide key={member.id}>
+                <TeamCard
+                  name={member.name}
+                  role={member.role}
+                  photo={member.photo}
+                  onRemove={editMode ? () => remove(member.id) : undefined}
+                />
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+
+          {editMode && (
+            <Button
+              mt="lg"
+              variant="light"
+              color="brandGreen"
+              leftSection={<IconPlus size={16} />}
+              onClick={() =>
+                add({ name: 'New Member', role: 'Profession', photo: member1 })
+              }
+            >
+              Add member
+            </Button>
+          )}
+        </Box>
+      </Stack>
     </Container>
   );
 }

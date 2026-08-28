@@ -1,36 +1,57 @@
-import { Container, Grid, Stack, Text, Title, Divider, Group } from '@mantine/core';
+import { Box, Button, Container, Grid, Group, Stack } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 import FeatureCard from '../common/FeatureCard.jsx';
 import HoverArrowLink from '../common/HoverArrowLink.jsx';
-import { packages } from '../../data/packages.js';
+import SectionHeader from '../common/SectionHeader.jsx';
+import { useCollection, useEditMode } from '../../context/ContentContext.jsx';
 
 export default function PackagesSection() {
+  const { items, add, remove } = useCollection('packages');
+  const [editMode] = useEditMode();
+
   return (
-    <Container size="xl" py={{ base: 40, sm: 60, md: 80 }}>
-      <Grid align="center" gutter={{ base: 30, md: 50 }}>
+    <Container size={1050} px="md" py={{ base: 56, sm: 90, md: 140 }}>
+      <Grid gutter={{ base: 40, md: 30 }} align="center">
         <Grid.Col span={{ base: 12, md: 5 }}>
-          <Stack gap="sm" maw={420}>
-            <Divider w={40} size="md" color="brandRed.6" />
-            <Title order={2} c="brandNavy.6" fz={{ base: 26, sm: 30 }}>
-              Affordable Packages
-            </Title>
-            <Text c="brandGray.6" size="sm">
+          <Stack gap={35} maw={507}>
+            <SectionHeader divider title="Approdable Packages" order={2} textMaxWidth={351}>
               Problems trying to resolve the conflict between the two major realms of
               Classical physics: Newtonian mechanics
-            </Text>
+            </SectionHeader>
             <HoverArrowLink>Learn More</HoverArrowLink>
           </Stack>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, md: 7 }}>
-          <Group gap="md" wrap="wrap">
-            {packages.map((pkg) => (
-              <FeatureCard
-                key={pkg.id}
-                icon={pkg.icon}
-                title={pkg.title}
-                description={pkg.description}
-              />
+          <Group gap={30} align="flex-start" wrap="wrap">
+            {items.map((pkg, i) => (
+              <Box key={pkg.id} mt={{ md: i % 2 === 1 ? 40 : 0 }}>
+                <FeatureCard
+                  icon={pkg.icon}
+                  title={pkg.title}
+                  description={pkg.description}
+                  onRemove={editMode ? () => remove(pkg.id) : undefined}
+                />
+              </Box>
             ))}
+
+            {editMode && (
+              <Button
+                variant="light"
+                color="brandGreen"
+                leftSection={<IconPlus size={16} />}
+                h={292}
+                onClick={() =>
+                  add({
+                    icon: 'blackboards',
+                    title: 'New feature',
+                    description: 'The gradual accumulation of information about',
+                  })
+                }
+              >
+                Add card
+              </Button>
+            )}
           </Group>
         </Grid.Col>
       </Grid>

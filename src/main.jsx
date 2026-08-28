@@ -5,11 +5,14 @@ import '@mantine/core/styles.css';
 import '@mantine/carousel/styles.css';
 import App from './App.jsx';
 import { theme } from './theme.js';
+import { ContentProvider } from './context/ContentContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <MantineProvider theme={theme}>
-      <App />
+      <ContentProvider>
+        <App />
+      </ContentProvider>
     </MantineProvider>
   </React.StrictMode>
 );
