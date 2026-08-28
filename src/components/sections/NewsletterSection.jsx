@@ -27,19 +27,21 @@ export default function NewsletterSection() {
   return (
     <Box bg="brandPink.0">
       <Container size={1050} px="md" py={{ base: 64, sm: 110, md: 160 }}>
-        <Stack gap={{ base: 48, md: 80 }} align="center">
+        <Stack gap={0} align="center">
           <SectionHeader
             eyebrow="Newsletter"
             title="Watch our Courses"
             order={3}
             align="center"
             textMaxWidth={469}
+            textFw={500}
           >
             Problems trying to resolve the conflict between the two major realms of
             Classical physics: Newtonian mechanics
           </SectionHeader>
 
-          <Box w="100%" maw={688}>
+          {/* Figma: 80px between the heading block and the subscribe field. */}
+          <Box w="100%" maw={688} mt={{ base: 48, md: 80 }}>
             <form onSubmit={form.onSubmit(handleSubmit)} noValidate>
               <Group gap={0} align="flex-start" wrap="nowrap">
                 <TextInput
@@ -50,8 +52,10 @@ export default function NewsletterSection() {
                   styles={{
                     input: {
                       height: 58,
+                      fontSize: 14,
                       backgroundColor: '#F9F9F9',
                       borderColor: '#E6E6E6',
+                      '--input-placeholder-color': '#737373',
                       borderTopRightRadius: 0,
                       borderBottomRightRadius: 0,
                     },

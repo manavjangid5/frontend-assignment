@@ -26,18 +26,30 @@ export default function Navbar() {
 
   return (
     <Box bg="brandPink.0" component="header">
-      {/* Figma navbar row max-width is 1322px — wider than the 1050px page body. */}
-      <Container size={1320} px="md" h={91}>
-        <Group h="100%" justify="space-between" wrap="nowrap">
-          <Text component="a" href="#" fw={700} fz={24} lh="32px" c="brandNavy.6" style={{ textDecoration: 'none' }}>
-            Brandname
-          </Text>
-
-          <Group gap={21} visibleFrom="md">
-            <NavItems />
+      {/* Figma nav content spans ~1050px — aligned with the page body. */}
+      <Container size={1050} px="md" h={91}>
+        <Group h="100%" align="flex-start" wrap="nowrap" justify="flex-start"
+  gap={120}>
+          {/* Brand + links sit together on the left (Figma: ~40px apart). */}
+          <Group gap={80} wrap="nowrap" mt={16}>
+            <Text
+              component="a"
+              href="#"
+              fw={700}
+              fz={24}
+              lh="32px"
+              c="brandNavy.6"
+              style={{ textDecoration: 'none' }}
+            >
+              Brandname
+            </Text>
+            <Group gap={21} wrap="nowrap" visibleFrom="md">
+              <NavItems />
+            </Group>
           </Group>
 
-          <Group gap={30} wrap="nowrap" visibleFrom="md">
+          {/* Login + CTA sit at the top-right of the bar (Figma y≈3). */}
+          <Group gap={40} wrap="nowrap" align="center" visibleFrom="md" mt={3}>
             <Anchor href="#" underline="never" fw={700} fz={14} c="brandGreen.6">
               Login
             </Anchor>
@@ -50,7 +62,13 @@ export default function Navbar() {
             </Button>
           </Group>
 
-          <Burger opened={opened} onClick={() => setOpened((o) => !o)} hiddenFrom="md" aria-label="Toggle navigation" />
+          <Burger
+            opened={opened}
+            onClick={() => setOpened((o) => !o)}
+            hiddenFrom="md"
+            mt={16}
+            aria-label="Toggle navigation"
+          />
         </Group>
       </Container>
 

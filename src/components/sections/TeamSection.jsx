@@ -19,7 +19,13 @@ export default function TeamSection() {
   return (
     <Container size={1050} px="md" py={{ base: 56, sm: 80, md: 112 }}>
       <Stack gap={0}>
-        <SectionHeader eyebrow="Team" title="Get Quality Education" order={3} textMaxWidth={469}>
+        <SectionHeader
+          eyebrow="Team"
+          title="Get Quality Education"
+          order={3}
+          textMaxWidth={469}
+          textFw={500}
+        >
           Problems trying to resolve the conflict between the two major realms of
           Classical physics: Newtonian mechanics
         </SectionHeader>
@@ -32,6 +38,9 @@ export default function TeamSection() {
             align="start"
             withControls={false}
             withIndicators={false}
+            // vertical breathing room so the card drop shadow isn't clipped by
+            // the carousel viewport's overflow:hidden (no horizontal change)
+            styles={{ viewport: { paddingTop: 6, paddingBottom: 30 } }}
           >
             {items.map((member) => (
               <Carousel.Slide key={member.id}>
