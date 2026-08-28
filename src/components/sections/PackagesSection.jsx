@@ -7,8 +7,10 @@ import HoverArrowLink from '../common/HoverArrowLink.jsx';
 import SectionHeader from '../common/SectionHeader.jsx';
 import { useCollection, useEditMode } from '../../context/ContentContext.jsx';
 
-// White circular prev/next controls, matching the Team carousel.
+// White circular prev/next controls pushed OUT beyond the cards, matching the
+// Team carousel. All-side viewport padding keeps the card shadow un-clipped.
 const carouselStyles = {
+  controls: { insetInline: -36 },
   control: {
     backgroundColor: 'var(--mantine-color-white)',
     color: 'var(--mantine-color-brandGreen-6)',
@@ -16,7 +18,7 @@ const carouselStyles = {
     border: 'none',
     opacity: 1,
   },
-  viewport: { paddingBlock: 8 },
+  viewport: { padding: '12px 24px 40px' },
 };
 
 export default function PackagesSection() {
@@ -29,7 +31,7 @@ export default function PackagesSection() {
   }, [embla, items.length]);
 
   return (
-    <Container size={1150} px="md" py={{ base: 56, sm: 90, md: 140 }}>
+    <Container size={1150} px="md" py={{ base: 56, sm: 90, md: 140 }} style={{ overflowX: 'clip' }}>
       <Flex
         direction={{ base: 'column', md: 'row' }}
         gap={{ base: 40, md: 30 }}
@@ -48,25 +50,7 @@ export default function PackagesSection() {
         </Box>
 
         {/* Cards — a carousel (2 up on desktop) so extra items stay in one row. */}
-        <Box w={{ base: '100%', md: 528 }} style={{ minWidth: 0 }}>
-          {editMode && (
-            <Button
-              size="xs"
-              variant="default"
-              leftSection={<IconPlus size={14} />}
-              mb="sm"
-              onClick={() =>
-                add({
-                  icon: 'blackboards',
-                  title: 'New feature',
-                  description: 'The gradual accumulation of information about',
-                })
-              }
-            >
-              Add card
-            </Button>
-          )}
-
+        <Box w={{ base: '100%', md: 580 }} style={{ minWidth: 0 }}>
           <Carousel
             getEmblaApi={setEmbla}
             slideSize={{ base: '85%', sm: '249px' }}
@@ -88,6 +72,24 @@ export default function PackagesSection() {
               </Carousel.Slide>
             ))}
           </Carousel>
+
+          {editMode && (
+            <Button
+              mt="md"
+              variant="light"
+              color="brandGreen"
+              leftSection={<IconPlus size={16} />}
+              onClick={() =>
+                add({
+                  icon: 'blackboards',
+                  title: 'New feature',
+                  description: 'The gradual accumulation of information about',
+                })
+              }
+            >
+              Add package
+            </Button>
+          )}
         </Box>
       </Flex>
     </Container>

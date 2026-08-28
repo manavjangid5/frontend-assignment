@@ -8,20 +8,22 @@ export default function NewsletterSection() {
 
   const form = useForm({
     initialValues: { email: '' },
-    // Clear the success message as soon as the field is edited again.
     onValuesChange: () => setSubmitted(false),
     validate: {
-      // Figma annotation: validate before submit, show the message below the field.
       email: (value) => {
-        if (!value.trim()) return 'Email is required';
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Enter a valid email address';
+        const v = value.trim();
+        if (!v) return 'Email is required';
+        if (v.length > 254) return 'Email is too long';
+        if (v.includes('..')) return 'Enter a valid email address';
+        const re =
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+        if (!re.test(v)) return 'Enter a valid email address';
         return null;
       },
     },
   });
 
   const handleSubmit = () => {
-    // No backend in scope — confirm locally once validation passes.
     setSubmitted(true);
   };
 
@@ -41,7 +43,6 @@ export default function NewsletterSection() {
             Classical physics: Newtonian mechanics
           </SectionHeader>
 
-          {/* Figma: 80px between the heading block and the subscribe field. */}
           <Box w="100%" maw={688} mt={{ base: 48, md: 80 }}>
             <form onSubmit={form.onSubmit(handleSubmit)} noValidate>
               <Group gap={0} align="flex-start" wrap="nowrap">

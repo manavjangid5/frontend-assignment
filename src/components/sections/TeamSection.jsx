@@ -12,9 +12,11 @@ import member1 from '../../assets/team/member-1.jpg';
 const SLIDE_GAP = 30;
 const slideSize = { base: '85%', xs: '50%', sm: '33.333%', md: '25%' };
 
-// White circular prev/next controls; vertical viewport padding keeps the card
-// drop shadow from being clipped by the viewport's overflow:hidden.
+// White circular prev/next controls pushed OUT beyond the slides (into the
+// wrapper's side padding) so they don't sit on the photos. Viewport padding
+// on every side keeps the card drop shadow from being clipped.
 const carouselStyles = {
+  controls: { insetInline: -42 },
   control: {
     backgroundColor: 'var(--mantine-color-white)',
     color: 'var(--mantine-color-brandGreen-6)',
@@ -22,7 +24,7 @@ const carouselStyles = {
     border: 'none',
     opacity: 1,
   },
-  viewport: { paddingTop: 6, paddingBottom: 30 },
+  viewport: { padding: '12px 22px 40px' },
 };
 
 export default function TeamSection() {
@@ -36,7 +38,7 @@ export default function TeamSection() {
   }, [embla, items.length]);
 
   return (
-    <Container size={1150} px="md" py={{ base: 56, sm: 80, md: 112 }}>
+    <Container size={1150} px="md" py={{ base: 56, sm: 80, md: 112 }} style={{ overflowX: 'clip' }}>
       <Stack gap={0}>
         <SectionHeader
           eyebrow="Team"
@@ -49,8 +51,9 @@ export default function TeamSection() {
           Classical physics: Newtonian mechanics
         </SectionHeader>
 
-        {/* Figma: 112px between the heading block and the card row. */}
-        <Box mt={{ base: 48, md: 112 }}>
+        {/* Figma: 112px between the heading block and the card row.
+            Side padding houses the prev/next controls. */}
+        <Box mt={{ base: 48, md: 112 }} px={{ base: 0, sm: 48 }}>
           <Carousel
             getEmblaApi={setEmbla}
             slideSize={slideSize}
@@ -76,7 +79,8 @@ export default function TeamSection() {
           {editMode && (
             <Button
               mt="lg"
-              variant="default"
+              variant="light"
+              color="brandGreen"
               leftSection={<IconPlus size={16} />}
               onClick={() => add({ name: 'New Member', role: 'Profession', photo: member1 })}
             >
