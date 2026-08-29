@@ -103,9 +103,12 @@ change it:
 
 The Team row is a carousel (the design marks it as one). Packages uses a
 carousel too, so that items added at runtime stay on a single row instead of
-wrapping. Prev / next controls only appear once there are more items than fit.
-In the default (non-edit) view the page matches the design: two package cards,
-four team cards, no controls.
+wrapping. Prev / next controls appear whenever the cards don't all fit at the
+current screen width (measured from Embla, updated on resize) or while edit
+mode is on. On a desktop the four team cards and two package cards fit, so
+there are no controls and the page matches the design; on a phone, where only
+one or two fit, the controls are shown from the start. Swipe / drag scrolling
+always works regardless.
 
 The **Edit content** button is fixed to the bottom-right corner. On wide
 screens (from 96em / ~1536px) the footer's social icons stay at the far right

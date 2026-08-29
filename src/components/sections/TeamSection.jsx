@@ -31,11 +31,32 @@ export default function TeamSection() {
   const { items, add, remove } = useCollection('team');
   const [editMode] = useEditMode();
   const [embla, setEmbla] = useState(null);
+  // True whenever the cards don't all fit and there is something to scroll to
+  // (depends on the current screen width, not just the item count).
+  const [overflows, setOverflows] = useState(false);
 
   // Re-measure when members are added / removed so the new slide is reachable.
   useEffect(() => {
     embla?.reInit();
   }, [embla, items.length]);
+
+  useEffect(() => {
+    if (!embla) return undefined;
+    const update = () => {
+      const viewport = embla.rootNode();
+      const track = embla.containerNode();
+      setOverflows(track.scrollWidth - viewport.clientWidth > 1);
+    };
+    update();
+    embla.on('reInit', update);
+    embla.on('resize', update);
+    window.addEventListener('resize', update);
+    return () => {
+      embla.off('reInit', update);
+      embla.off('resize', update);
+      window.removeEventListener('resize', update);
+    };
+  }, [embla]);
 
   const [addedMsg, setAddedMsg] = useState(false);
 
@@ -67,7 +88,7 @@ export default function TeamSection() {
             slideGap={SLIDE_GAP}
             align="start"
             controlSize={40}
-            withControls={editMode || items.length > 4}
+            withControls={editMode || overflows}
             withIndicators={false}
             styles={carouselStyles}
           >
