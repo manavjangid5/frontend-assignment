@@ -8,11 +8,14 @@ import SectionHeader from '../common/SectionHeader.jsx';
 export default function NewsletterSection() {
   const [submitted, setSubmitted] = useState(false);
 
+  // Validation could also be handled directly through Mantine's `validate` API.
+  // Zod is used here to keep validation rules declarative, reusable, and easier to
+  // scale as the form grows.
   const form = useForm({
     initialValues: { email: '' },
-    // Validation rules come from the Zod schema; the resolver adapts them to
-    // Mantine's form API.
+    // Validation rules come from the Zod schema; the resolver adapts them to Mantine's form API.
     validate: zodResolver(newsletterSchema),
+    
     // Hide the success message again as soon as the field is edited.
     onValuesChange: () => setSubmitted(false),
   });

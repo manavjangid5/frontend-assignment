@@ -21,7 +21,7 @@ npm run preview
 ## Tech stack
 
 - **React 18** + **Vite 5**
-- **Mantine 7** — `@mantine/core`, `@mantine/hooks`, `@mantine/form`,
+- **Mantine 7** - `@mantine/core`, `@mantine/hooks`, `@mantine/form`,
   `@mantine/carousel`
 - **@tabler/icons-react** for a few utility icons
 - **Zod** + **mantine-form-zod-resolver** for form validation
@@ -37,7 +37,7 @@ src/
   main.jsx                  App bootstrap + MantineProvider + ContentProvider
   App.jsx                   Assembles the page sections
   theme.js                  Mantine theme: colours, fonts, type scale, radii,
-                            shadows — the single place these values are defined
+                            shadows - the single place these values are defined
   context/
     ContentContext.jsx      Context + useReducer holding the editable
                             collections and the "edit mode" flag
@@ -57,9 +57,9 @@ src/
 State is intentionally kept small. `src/context/ContentContext.jsx` provides a
 single context backed by `useReducer`:
 
-- **`packages`** and **`team`** — the collections rendered by their sections,
+- **`packages`** and **`team`** - the collections rendered by their sections,
   seeded from `src/data/`.
-- **`editMode`** — a boolean toggled by the floating button at the bottom-right.
+- **`editMode`** - a boolean toggled by the floating button at the bottom-right.
 
 Sections read a collection through the `useCollection(name)` hook, which returns
 `items` plus `add`, `update` and `remove` helpers. This is enough for the
@@ -92,9 +92,9 @@ There is no backend, so a successful submit only updates local state.
 Every repeating block renders from data, never from hardcoded JSX. Two ways to
 change it:
 
-1. **Edit the seed files** in `src/data/` — add, remove or change an entry and
+1. **Edit the seed files** in `src/data/` - add, remove or change an entry and
    the section re-renders.
-2. **At runtime** — click **"Edit content"** (bottom-right). Each card then gets
+2. **At runtime** - click **"Edit content"** (bottom-right). Each card then gets
    a remove control, and an **Add package** / **Add member** button appends a
    new item. A short "added successfully" note shows next to the button and
    disappears after two seconds.
@@ -123,21 +123,21 @@ Type scale (size / line-height): H1 58/80, H2 40/50, H3 24/32, hero subtitle
 
 ## Assumptions and decisions
 
-- **"Affordable Packages"** — the design shows the heading as "Approdable
+- **"Affordable Packages"** - the design shows the heading as "Approdable
   Packages". Read as a typo and corrected to "Affordable", which fits the
   section's meaning.
 - **Hero artwork** ships as a single transparent PNG (photo plus the decorative
-  blobs and squiggles) rather than rebuilt vector shapes.
-- **Icons** — feature-card and social icons are the SVGs from the design.
+  blobs) rather than rebuilt vector shapes.
+- **Icons** - feature-card and social icons are the SVGs from the design.
   Footer contact icons use Tabler equivalents (`IconPhone`, `IconMapPin`,
   `IconSend`) as there were no custom assets for them.
-- **Newsletter** — no API is specified, so validation runs client-side and a
+- **Newsletter** - no API is specified, so validation runs client-side and a
   successful submit only shows a local confirmation.
-- **Responsive layouts** — only a desktop frame was provided; tablet and mobile
+- **Responsive layouts** - only a desktop frame was provided; tablet and mobile
   behaviour is derived with Mantine's breakpoints and responsive style props
   (columns stack, the nav collapses to a burger menu, carousels show fewer
   cards with a peek).
-- **Placeholder content** — repeated names ("Julian Jameson"), the "Profession"
+- **Placeholder content** - repeated names ("Julian Jameson"), the "Profession"
   label and the lorem-style paragraph are kept as they appear in the design.
 
 ## Constraints followed
@@ -147,5 +147,5 @@ Type scale (size / line-height): H1 58/80, H2 40/50, H3 24/32, hero subtitle
 - Styling through Mantine style props and the theme. The one exception is
   `src/components/common/HoverArrowLink.module.css`, which holds the
   `:hover` transform for the "arrow moves 5px right" interaction the design
-  calls for — Mantine's style props can't target a pseudo-class.
+  calls for - Mantine's style props can't target a pseudo-class.
 - Components are small, reusable and named for what they render.
