@@ -1,5 +1,5 @@
-// Seed content for the "Approdable Packages" feature cards.
-// `icon` is a key into `featureIcons` (src/assets/icons) so entries stay
+// Seed content for the "Affordable Packages" feature cards.
+// icon is a key into featureIcons (src/assets/icons) so entries stay
 // plain data — add, remove, or edit one here (or at runtime in edit mode)
 // and PackagesSection re-renders from it.
 export const packages = [

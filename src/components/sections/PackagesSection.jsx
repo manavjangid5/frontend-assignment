@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, Container, Flex, Stack } from '@mantine/core';
+import { Box, Button, Container, Flex, Stack, Group, Text } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
 import { IconPlus } from '@tabler/icons-react';
 import FeatureCard from '../common/FeatureCard.jsx';
@@ -32,6 +32,18 @@ export default function PackagesSection() {
   useEffect(() => {
     embla?.reInit();
   }, [embla, items.length]);
+
+  const [addedMsg, setAddedMsg] = useState(false);
+
+  const handleAdd = () => {
+    add({
+      icon: 'blackboards',
+      title: 'New feature',
+      description: 'The gradual accumulation of information about',
+    });
+    setAddedMsg(true);
+    setTimeout(() => setAddedMsg(false), 2000);
+  };
 
   return (
     <Container size={1150} px="md" py={{ base: 56, sm: 90, md: 140 }}>
@@ -78,21 +90,21 @@ export default function PackagesSection() {
           </Carousel>
 
           {editMode && (
-            <Button
-              mt="md"
-              variant="light"
-              color="brandGreen"
-              leftSection={<IconPlus size={16} />}
-              onClick={() =>
-                add({
-                  icon: 'blackboards',
-                  title: 'New feature',
-                  description: 'The gradual accumulation of information about',
-                })
-              }
-            >
-              Add package
-            </Button>
+            <Group mt="md" gap="md" align="center">
+              <Button
+                variant="light"
+                color="brandGreen"
+                leftSection={<IconPlus size={16} />}
+                onClick={handleAdd}
+              >
+                Add package
+              </Button>
+              {addedMsg && (
+                <Text fz={14} fw={500} c="brandGreen.6">
+                  Package added successfully!
+                </Text>
+              )}
+            </Group>
           )}
         </Box>
       </Flex>

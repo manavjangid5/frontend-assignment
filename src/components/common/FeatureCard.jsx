@@ -1,13 +1,6 @@
 import { Box, Card, CloseButton, Image, Stack, Text } from '@mantine/core';
 import { featureIcons } from '../../assets/icons/index.js';
 
-/**
- * A single "packages" feature card.
- * Figma: 249×292, padding 35/40, square corners, soft drop shadow. The icon
- * tile, title, 50×2 red accent bar and description are evenly spaced 20px apart.
- *
- * `onRemove` is supplied only in edit mode and renders a delete control.
- */
 export default function FeatureCard({ icon, title, description, onRemove }) {
   return (
     <Card

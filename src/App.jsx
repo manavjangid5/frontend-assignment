@@ -10,7 +10,6 @@ export default function App() {
   return (
     <>
       <Navbar />
-      {/* clip, not scroll, when carousel controls sit in the page margin */}
       <main style={{ overflowX: 'clip' }}>
         <Hero />
         <PackagesSection />

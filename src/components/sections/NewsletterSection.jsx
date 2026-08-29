@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Box, Button, Container, Group, Stack, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { zodResolver } from 'mantine-form-zod-resolver';
+import { newsletterSchema } from '../../schemas/newsletterSchema.js';
 import SectionHeader from '../common/SectionHeader.jsx';
 
 export default function NewsletterSection() {
@@ -8,19 +10,11 @@ export default function NewsletterSection() {
 
   const form = useForm({
     initialValues: { email: '' },
+    // Validation rules come from the Zod schema; the resolver adapts them to
+    // Mantine's form API.
+    validate: zodResolver(newsletterSchema),
+    // Hide the success message again as soon as the field is edited.
     onValuesChange: () => setSubmitted(false),
-    validate: {
-      email: (value) => {
-        const v = value.trim();
-        if (!v) return 'Email is required';
-        if (v.length > 254) return 'Email is too long';
-        if (v.includes('..')) return 'Enter a valid email address';
-        const re =
-          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
-        if (!re.test(v)) return 'Enter a valid email address';
-        return null;
-      },
-    },
   });
 
   const handleSubmit = () => {

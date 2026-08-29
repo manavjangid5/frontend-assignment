@@ -1,99 +1,151 @@
 # Frontend Assignment
 
-A responsive landing page built with **React + Vite + Mantine UI**, matching the
-provided Figma design across desktop, tablet and mobile.
+A responsive marketing landing page built with React, Vite and Mantine UI. The
+layout follows the provided Figma design across desktop, tablet and mobile.
 
-## Running the project
+## Getting started
 
 ```bash
 npm install && npm run dev
 ```
 
-Then open the printed local URL (default `http://localhost:5173`).
+Then open the URL that Vite prints (defaults to `http://localhost:5173`).
 
-To produce a production build:
+Production build:
 
 ```bash
 npm run build
 npm run preview
 ```
 
+## Tech stack
+
+- **React 18** + **Vite 5**
+- **Mantine 7** — `@mantine/core`, `@mantine/hooks`, `@mantine/form`,
+  `@mantine/carousel`
+- **@tabler/icons-react** for a few utility icons
+- **Zod** + **mantine-form-zod-resolver** for form validation
+
+No CSS framework is used. Styling is done with Mantine's style props and theme;
+the only hand-written CSS is one CSS module for a `:hover` transition (see
+"Constraints" below).
+
 ## Project structure
 
 ```
 src/
-  theme.js                    Mantine theme — single source of truth for colours,
-                              fonts, the type ramp, radii and shadows (all taken
-                              from the Figma component styles)
-  App.jsx                     Assembles all sections
+  main.jsx                  App bootstrap + MantineProvider + ContentProvider
+  App.jsx                   Assembles the page sections
+  theme.js                  Mantine theme: colours, fonts, type scale, radii,
+                            shadows — the single place these values are defined
   context/
-    ContentContext.jsx        Small React context + useReducer holding the
-                              editable collections (packages, team) and the
-                              "edit mode" flag
-  data/                       Seed content — edit these arrays to add / remove /
-    packages.js                 update items with no component changes
-    team.js
-    footerLinks.js
-  assets/
-    hero.png                  Hero illustration (exported from Figma)
-    team/                     Team member photos (exported from Figma)
-    icons/                    Feature + social SVG glyphs (exported from Figma)
+    ContentContext.jsx      Context + useReducer holding the editable
+                            collections and the "edit mode" flag
+  schemas/
+    newsletterSchema.js     Zod schema for the newsletter form
+  data/                     Seed content (packages, team members, footer links)
+  assets/                   Hero illustration, team photos, SVG icons
   components/
-    layout/                   Navbar, Footer
-    sections/                 Hero, PackagesSection, TeamSection, NewsletterSection
-    common/                   FeatureCard, TeamCard, SectionHeader,
-                              HoverArrowLink, EditModeToggle
+    layout/                 Navbar, Footer
+    sections/               Hero, PackagesSection, TeamSection, NewsletterSection
+    common/                 FeatureCard, TeamCard, SectionHeader,
+                            HoverArrowLink, EditModeToggle
 ```
 
-## Dynamic content
+## State management
 
-Every repeating block (feature cards, team members) renders from an array in
-`src/data/`. There are two ways to change them:
+State is intentionally kept small. `src/context/ContentContext.jsx` provides a
+single context backed by `useReducer`:
 
-1. **Edit the seed data** — add, remove or edit an entry in `src/data/*.js`;
-   the sections re-render from it, no JSX changes needed.
-2. **At runtime** — click **“Edit content”** (bottom-right). While on, the
-   Packages and Team sections show add / remove controls. State lives in
-   `src/context/ContentContext.jsx` (plain context + `useReducer`, no external
-   state library). Off by default, so the page matches the design as-is.
+- **`packages`** and **`team`** — the collections rendered by their sections,
+  seeded from `src/data/`.
+- **`editMode`** — a boolean toggled by the floating button at the bottom-right.
 
-## Design tokens (from Figma)
+Sections read a collection through the `useCollection(name)` hook, which returns
+`items` plus `add`, `update` and `remove` helpers. This is enough for the
+"items can be added / removed / updated" requirement without pulling in Redux,
+Zustand or similar.
 
-| Token | Value | Use |
+## Form validation (Zod)
+
+The newsletter email field is validated against a Zod schema
+(`src/schemas/newsletterSchema.js`) wired into Mantine's form via
+`zodResolver`. The schema:
+
+- trims the value and requires it to be non-empty (`Email is required`)
+- caps the length at 254 characters
+- checks the address format with `z.string().email()`
+- rejects consecutive dots (`foo..bar@x.com`)
+
+`pipe` is used so an empty field reports "Email is required" rather than the
+format message.
+
+To see it in action: submit with the field empty, then with `notanemail`, then
+with a real address such as `name@example.com`. Errors appear beneath the field;
+a valid submit shows a local "Thanks for subscribing!" line, which clears again
+as soon as the field is edited (handled with `onValuesChange`).
+
+There is no backend, so a successful submit only updates local state.
+
+## Dynamic content and edit mode
+
+Every repeating block renders from data, never from hardcoded JSX. Two ways to
+change it:
+
+1. **Edit the seed files** in `src/data/` — add, remove or change an entry and
+   the section re-renders.
+2. **At runtime** — click **"Edit content"** (bottom-right). Each card then gets
+   a remove control, and an **Add package** / **Add member** button appends a
+   new item. A short "added successfully" note shows next to the button and
+   disappears after two seconds.
+
+The Team row is a carousel (the design marks it as one). Packages uses a
+carousel too, so that items added at runtime stay on a single row instead of
+wrapping. Prev / next controls only appear once there are more items than fit.
+In the default (non-edit) view the page matches the design: two package cards,
+four team cards, no controls.
+
+## Design tokens
+
+| Token | Value | Used for |
 | --- | --- | --- |
-| Primary | `#96BB7C` | Buttons, icons, links, accents |
+| Primary | `#96BB7C` | Buttons, icons, links, accent fills |
 | Heading text | `#252B42` | Headings |
 | Body text | `#737373` | Paragraph copy |
-| Accent bar | `#E74040` | Short underlines under section titles |
-| Section tint | `#FFF2F3` | Hero + newsletter backgrounds |
-| Footer bar | `#FAFAFA` | Footer lower strip |
-| Font | Montserrat (400, 700) | Everything |
-| Radii | 5px / 10px / 20px | Controls / icon tiles / team cards |
+| Accent bar | `#E74040` | Short underline under section titles |
+| Section tint | `#FFF2F3` | Hero and newsletter backgrounds |
+| Footer strip | `#FAFAFA` | Footer lower bar |
+| Font | Montserrat (400, 500, 700) | Everything |
+| Radii | 5 / 10 / 20 px | Controls / icon tiles / team cards |
 
-Type ramp (font-size / line-height): H1 58/80, H2 40/50, H3 24/32,
-hero sub 20/30, card + footer headings 16/24, body 14/20, small 12/16.
+Type scale (size / line-height): H1 58/80, H2 40/50, H3 24/32, hero subtitle
+20/30, card and footer headings 16/24, body 14/20, small 12/16.
 
-## Notes / assumptions
+## Assumptions and decisions
 
-- **Hero decorations** ship as one exported PNG (photo + colour blobs +
-  squiggles composited) rather than reconstructed vectors.
-- **Feature-card and social icons** are the exact SVGs exported from the design
-  (`src/assets/icons`). Footer contact icons use Tabler equivalents
-  (`IconPhone` / `IconMapPin` / `IconSend`) as the design has no custom assets
-  for them.
-- **Newsletter submit** has no backend in scope — validation (required + email
-  format, error shown under the field per the Figma annotation) runs, then a
-  local success message is shown.
-- The Packages section title reads **“Approdable Packages”** to match the Figma
-  text exactly (the design contains that spelling).
-- Tablet / mobile layouts are derived from the single 1440px desktop frame the
-  Figma provides, using Mantine's responsive style props and breakpoints.
+- **"Affordable Packages"** — the design shows the heading as "Approdable
+  Packages". Read as a typo and corrected to "Affordable", which fits the
+  section's meaning.
+- **Hero artwork** ships as a single transparent PNG (photo plus the decorative
+  blobs and squiggles) rather than rebuilt vector shapes.
+- **Icons** — feature-card and social icons are the SVGs from the design.
+  Footer contact icons use Tabler equivalents (`IconPhone`, `IconMapPin`,
+  `IconSend`) as there were no custom assets for them.
+- **Newsletter** — no API is specified, so validation runs client-side and a
+  successful submit only shows a local confirmation.
+- **Responsive layouts** — only a desktop frame was provided; tablet and mobile
+  behaviour is derived with Mantine's breakpoints and responsive style props
+  (columns stack, the nav collapses to a burger menu, carousels show fewer
+  cards with a peek).
+- **Placeholder content** — repeated names ("Julian Jameson"), the "Profession"
+  label and the lorem-style paragraph are kept as they appear in the design.
 
-## Tech constraints followed
+## Constraints followed
 
-- Mantine UI components for all UI elements
-- No Tailwind / styled-components / other CSS libraries
-- Styling via Mantine style props + theming; the only custom CSS is
-  `HoverArrowLink.module.css` for the `:hover` arrow-shift micro-interaction the
-  design annotation calls for (Mantine style props can't express a `:hover`
-  transform)
+- Mantine components for all UI; no Tailwind, styled-components or other CSS
+  libraries.
+- Styling through Mantine style props and the theme. The one exception is
+  `src/components/common/HoverArrowLink.module.css`, which holds the
+  `:hover` transform for the "arrow moves 5px right" interaction the design
+  calls for — Mantine's style props can't target a pseudo-class.
+- Components are small, reusable and named for what they render.

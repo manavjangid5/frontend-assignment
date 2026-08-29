@@ -1,15 +1,5 @@
 import { createTheme } from '@mantine/core';
 
-/**
- * Builds a 10-step Mantine colour scale from a single base hex.
- * Index 0 = lightest, 9 = darkest; index 6 is the untouched base and is
- * used as the default shade (see `primaryShade` below).
- *
- * The Figma file only provides one swatch per colour, so the tints/shades
- * either side of the base are interpolated. The base values themselves are
- * taken from the component styles in the design (NOT the "Color Palettes"
- * board, whose swatch labels disagree with what the components actually use).
- */
 function generateShades(hex) {
   const clean = hex.replace('#', '');
   const r = parseInt(clean.substring(0, 2), 16);
@@ -52,7 +42,7 @@ const palette = {
   brandNavy: generateShades('#252B42'),
   brandGray: generateShades('#737373'),
   brandRed: generateShades('#E74040'),
-  // Anchored so index 0 is the exact section-background tint from Figma.
+  
   brandPink: [
     '#FFF2F3',
     '#FFE3E5',

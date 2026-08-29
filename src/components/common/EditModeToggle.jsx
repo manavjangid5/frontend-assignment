@@ -2,11 +2,6 @@ import { Button } from '@mantine/core';
 import { IconPencil, IconCheck } from '@tabler/icons-react';
 import { useEditMode } from '../../context/ContentContext.jsx';
 
-/**
- * Floating toggle for the demo "edit mode". While on, the Packages and Team
- * sections expose add / remove controls so their items are editable at
- * runtime. Off by default, so the page matches the Figma design as-is.
- */
 export default function EditModeToggle() {
   const [editMode, toggle] = useEditMode();
 

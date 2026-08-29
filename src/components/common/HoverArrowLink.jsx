@@ -2,7 +2,7 @@ import { Group, Text } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons-react';
 import classes from './HoverArrowLink.module.css';
 
-// Figma annotation: "Add hover animation, arrow should move right by 5 pixels."
+// Figma instruction: "Add hover animation, arrow should move right by 5 pixels."
 export default function HoverArrowLink({ children, ...props }) {
   return (
     <Group gap={10} className={classes.link} component="a" href="#" {...props}>

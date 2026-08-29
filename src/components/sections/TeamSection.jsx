@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, Container, Stack } from '@mantine/core';
+import { Box, Button, Container, Group, Text, Stack } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
 import { IconPlus } from '@tabler/icons-react';
 import TeamCard from '../common/TeamCard.jsx';
@@ -7,12 +7,10 @@ import SectionHeader from '../common/SectionHeader.jsx';
 import { useCollection, useEditMode } from '../../context/ContentContext.jsx';
 import member1 from '../../assets/team/member-1.jpg';
 
-// Figma cards row: 4 across on desktop with 30px gaps; fewer + a peek on
-// smaller screens.
 const SLIDE_GAP = 30;
 const slideSize = { base: '85%', xs: '50%', sm: '33.333%', md: '25%' };
 
-// White circular prev/next controls sit just outside the cards — in the page
+// White circular prev/next controls sit just outside the cards - in the page
 // margin (the page's <main> clips any overhang, so no scrollbar). The 20px
 // horizontal viewport padding both keeps the card drop shadow from being
 // clipped and is matched by the heading's left padding so they line up.
@@ -39,11 +37,17 @@ export default function TeamSection() {
     embla?.reInit();
   }, [embla, items.length]);
 
+  const [addedMsg, setAddedMsg] = useState(false);
+
+  const handleAdd = () => {
+    add({ name: 'New Member', role: 'Profession', photo: member1 });
+    setAddedMsg(true);
+    setTimeout(() => setAddedMsg(false), 2000);
+  };
+
   return (
     <Container size={1150} px="md" py={{ base: 56, sm: 80, md: 112 }}>
       <Stack gap={0}>
-        {/* left padding matches the carousel's inner padding so the heading
-            lines up with the first card */}
         <Box pl={{ base: 0, sm: EDGE_PAD }}>
           <SectionHeader
             eyebrow="Team"
@@ -56,8 +60,6 @@ export default function TeamSection() {
             Classical physics: Newtonian mechanics
           </SectionHeader>
         </Box>
-
-        {/* Figma: 112px between the heading block and the card row. */}
         <Box mt={{ base: 48, md: 112 }}>
           <Carousel
             getEmblaApi={setEmbla}
@@ -82,15 +84,21 @@ export default function TeamSection() {
           </Carousel>
 
           {editMode && (
-            <Button
-              mt="lg"
-              variant="light"
-              color="brandGreen"
-              leftSection={<IconPlus size={16} />}
-              onClick={() => add({ name: 'New Member', role: 'Profession', photo: member1 })}
-            >
-              Add member
-            </Button>
+            <Group mt="lg" gap="md" align="center">
+              <Button
+                variant="light"
+                color="brandGreen"
+                leftSection={<IconPlus size={16} />}
+                onClick={handleAdd}
+              >
+                Add member
+              </Button>
+              {addedMsg && (
+                <Text fz={14} fw={500} c="brandGreen.6">
+                  Member added successfully!
+                </Text>
+              )}
+            </Group>
           )}
         </Box>
       </Stack>

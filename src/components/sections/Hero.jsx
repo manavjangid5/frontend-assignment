@@ -36,8 +36,6 @@ export default function Hero() {
             </Group>
           </Stack>
         </Box>
-
-        {/* Image column bleeds to the right viewport edge (Figma). */}
         <Flex
           justify={{ base: 'center', md: 'flex-end' }}
           style={{ flex: 1, minWidth: 0 }}

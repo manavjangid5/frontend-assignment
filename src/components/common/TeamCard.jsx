@@ -7,13 +7,6 @@ const socials = [
   { key: 'twitter', label: 'Twitter' },
 ];
 
-/**
- * A team member card for the Team carousel.
- * Figma: ~240×375, 20px radius, 231px image band, centred content with name,
- * role and three brand-green social glyphs.
- *
- * `onRemove` is supplied only in edit mode.
- */
 export default function TeamCard({ name, role, photo, onRemove }) {
   return (
     <Card

@@ -2,14 +2,6 @@ import { createContext, useContext, useMemo, useReducer } from 'react';
 import { packages as seedPackages } from '../data/packages.js';
 import { team as seedTeam } from '../data/team.js';
 
-/**
- * Holds the page's editable collections (feature packages, team members) plus
- * an `editMode` flag. Plain React context + useReducer — deliberately small,
- * no external state library. Each section reads its collection through the
- * `useCollection` hook and gets `add` / `update` / `remove` helpers so items
- * are dynamic at runtime, not hardcoded in JSX.
- */
-
 const initialState = {
   editMode: false,
   packages: seedPackages,
@@ -70,7 +62,7 @@ function useContent() {
   return ctx;
 }
 
-/** `[editMode, toggleEditMode]` */
+//[editMode, toggleEditMode]
 export function useEditMode() {
   const { state, dispatch } = useContent();
   return [state.editMode, () => dispatch({ type: 'toggleEdit' })];
