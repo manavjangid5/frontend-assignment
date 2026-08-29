@@ -1,4 +1,4 @@
-import { Anchor, Box, Container, Group, Image, Stack, Text, Grid } from '@mantine/core';
+import { Anchor, Box, Container, Flex, Group, Image, Stack, Text, Grid } from '@mantine/core';
 import { IconPhone, IconMapPin, IconSend } from '@tabler/icons-react';
 import { footerColumns, contactInfo } from '../../data/footerLinks.js';
 import { socialIcons } from '../../assets/icons/index.js';
@@ -77,12 +77,21 @@ export default function Footer() {
 
       <Box bg="#FAFAFA">
         <Container size={1150} px="md" py={25}>
-          <Group justify="space-between" gap="md">
+          {/* On narrower screens the social icons move next to the copyright
+              line so the fixed "Edit content" button can't cover them. They
+              only return to the right edge once the screen is wide enough that
+              the button clears them. */}
+          <Flex
+            align="center"
+            gap="md"
+            wrap="wrap"
+            justify={{ base: 'flex-start', xxl: 'space-between' }}
+          >
             <Text fw={700} fz={14} lh="24px" c="brandGray.6">
               Made With Love By Figmaland All Right Reserved
             </Text>
             <SocialRow />
-          </Group>
+          </Flex>
         </Container>
       </Box>
     </Box>

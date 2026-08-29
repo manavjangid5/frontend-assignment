@@ -9,6 +9,8 @@ layout follows the provided Figma design across desktop, tablet and mobile.
 npm install && npm run dev
 ```
 
+The `&&` chaining works in PowerShell 7+, Git Bash, cmd.exe and macOS/Linux shells; on Windows PowerShell 5.x run the two commands on separate lines.
+
 Then open the URL that Vite prints (defaults to `http://localhost:5173`).
 
 Production build:
@@ -105,6 +107,11 @@ wrapping. Prev / next controls only appear once there are more items than fit.
 In the default (non-edit) view the page matches the design: two package cards,
 four team cards, no controls.
 
+The **Edit content** button is fixed to the bottom-right corner. On wide
+screens (from 96em / ~1536px) the footer's social icons stay at the far right
+as in the design; below that they sit next to the copyright line on the left,
+so the button never covers them or blocks clicks.
+
 ## Design tokens
 
 | Token | Value | Used for |
@@ -139,6 +146,11 @@ Type scale (size / line-height): H1 58/80, H2 40/50, H3 24/32, hero subtitle
   cards with a peek).
 - **Placeholder content** - repeated names ("Julian Jameson"), the "Profession"
   label and the lorem-style paragraph are kept as they appear in the design.
+- **Footer social icons** - kept at the right edge on wide screens to match the
+  design, but shifted left next to the copyright text below 96em (~1536px). The
+  "Edit content" button is fixed to the bottom-right, and at smaller widths it
+  would otherwise overlap the icons and make them unclickable. This uses one
+  extra breakpoint (`xxl`) added in `src/theme.js`.
 
 ## Constraints followed
 

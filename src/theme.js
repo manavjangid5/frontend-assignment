@@ -62,6 +62,17 @@ export const theme = createTheme({
   primaryColor: 'brandGreen',
   primaryShade: 6,
 
+  // Mantine defaults plus one extra step. `xxl` is only used by the footer
+  // bottom bar, to keep its social icons at the right edge on wide screens.
+  breakpoints: {
+    xs: '36em',
+    sm: '48em',
+    md: '62em',
+    lg: '75em',
+    xl: '88em',
+    xxl: '96em',
+  },
+
   fontFamily:
     "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
   headings: {
